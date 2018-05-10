@@ -42,10 +42,10 @@ func TestEval(t *testing.T) {
 	data := base64.StdEncoding.EncodeToString(bytedata)
 	tc.SetInput("password", data)
 	tc.SetInput("separator", "#")
-	tc.SetInput("fileSelector", "C:/Users/rpuranda/Desktop/questions.txt")
+	tc.SetInput("fileSelector", "{\"content\":\"data:text/plain;base64,MS5XaGVyZSB3aWxsIHdlIHNldCB1cCBkb2NrZXI/DQoyLkFyZSB3ZSBkZXZlbG9waW5nIGNvbW11bml0eSBlZGl0aW9uIGNvbnRyaWJ1dGlvbj8NCjMuV2hpY2ggcGx1Z2luIHdlIGFyZSBjb252ZXJ0aW5nIHRvIGNvbnRpYnV0aW9uPw0KIA==\",\"filename\":\"questions.txt\"}")
 	//tc.SetInput("headers", "[{\"parameterName\":\"sddd\",\"type\":\"number\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":true},{\"parameterName\":\"Accept- Charset\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false}]")
 	_, err := act.Eval(tc)
 	assert.Nil(t, err)
 	result := tc.GetOutput("result")
-	assert.Equal(t, result, "HelloWorld!test#"+"C:/Users/rpuranda/Desktop/questions.txt")
+	assert.Equal(t, result, "HelloWorld!test#questions.txt")
 }

@@ -51,7 +51,7 @@
            {
             "name": "fileSelector",
             "type": "string",
-            "required": true,
+            "required": false,
             "display": {
                 "name": "Select a file",
                 
@@ -68,7 +68,7 @@
             "type": "complex_object",
             "display": {
             "type": "params",
-            
+            "required": false,
             "schema": "{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"parameterName\":{\"type\":\"string\"},\"type\":{\"type\":{\"enum\":[\"string\",\"number\",\"boolean\"]}},\"repeating\":{\"type\":{\"enum\":[\"true\",\"false\"]}},\"required\":{\"type\":{\"enum\":[\"true\",\"false\"]}}}}}",
             "readonly": false,
             "name":"Query Params",
@@ -106,6 +106,7 @@
                 {
                     "name": "Field Selector",
                     "type": "array",
+                    "required": false,
                     "display": {
                         "description": "Select the fields used for filtering the items to be upserted",
                         "name": "Field Selector",

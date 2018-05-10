@@ -2,8 +2,8 @@ package concatactivity
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
@@ -66,7 +66,6 @@ func (a *ConcatActivity) Metadata() *activity.Metadata {
 		}
 		return m, nil
 	}
-
 	return nil, nil
 }
 func LoadJsonSchemaFromMetadata(valueIN interface{}) (map[string]interface{}, error) {
@@ -82,15 +81,11 @@ func LoadJsonSchemaFromMetadata(valueIN interface{}) (map[string]interface{}, er
 	}
 	return nil, nil
 }
-
 func ParseParams(paramSchema map[string]interface{}) ([]Param, error) {
-
 	if paramSchema == nil {
 		return nil, nil
 	}
-
 	var parameter []Param
-
 	//Structure expected to be JSON schema like
 	props := paramSchema["properties"].(map[string]interface{})
 	for k, v := range props {
@@ -117,7 +112,6 @@ func ParseParams(paramSchema map[string]interface{}) ([]Param, error) {
 		}
 		parameter = append(parameter, *param)
 	}
-
 	return parameter, nil
 }*/
 
@@ -161,16 +155,14 @@ func (a *ConcatActivity) Eval(context activity.Context) (done bool, err error) {
 	if context.GetInput(ivFileSelectorField) == nil {
 		return false, activity.NewError("No file selected", "CONCAT-4005", nil)
 	}
+
 	ivFileSelectorField := context.GetInput(ivFileSelectorField).(string)
 
-	data1, err1 := ioutil.ReadFile(ivFileSelectorField)
-	if err1 != nil {
-		fmt.Println("Can't read file:", ivFileSelectorField)
-		panic(err1)
-	}
-	fmt.Println("File content is:")
-	fmt.Println(string(data1))
-
+	//Parse json file and get file name
+	var result map[string]interface{}
+	json.Unmarshal([]byte(ivFileSelectorField), &result)
+	fmt.Println(result["filename"])
+	var fileName = result["filename"].(string)
 	//Param field
 	/*queryParamsMap, _ := LoadJsonSchemaFromMetadata(context.GetInput(ivParamField))
 	if queryParamsMap != nil {
@@ -180,6 +172,6 @@ func (a *ConcatActivity) Eval(context activity.Context) (done bool, err error) {
 		}
 	}*/
 	//Set output
-	context.SetOutput(ovResult, field1v+field2v+ivPasswordField+ivdropDownField+ivFileSelectorField)
+	context.SetOutput(ovResult, field1v+field2v+ivPasswordField+ivdropDownField+fileName)
 	return true, nil
 }
