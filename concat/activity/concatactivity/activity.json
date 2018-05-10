@@ -1,0 +1,128 @@
+{
+    "name": "concat",
+    "title": "Concat Activity",
+    "version": "1.0.0",
+    "type": "flogo:activity",
+    "author": "TIBCO Software Inc.",
+    "display": {
+       "category": "concat",
+       "visible": true,
+       "smallIcon": "image.png",
+       "description": "This activity returns concatenation of two strings"
+    },
+ 
+    "ref": "concat/activity/concatactivity",
+    "inputs": [
+           {
+            "name": "firstString",
+            "type": "string",
+            "required": true
+           },
+           {
+            "name": "secondString",
+            "type": "string",
+            "required": true
+           },
+           {
+            "name": "password",
+            "type": "string",
+            "required": false,
+            "display": {
+                "name": "Password",
+                
+                "description":"This is password field",
+                
+                "type": "password"
+                
+                }
+           },
+           {
+            "name": "separator",
+            "type": "string",
+            "required": true,
+            "display": {
+               "name": "Separator",
+               "type": "dropdown",
+               "selection": "multi",
+               "description": "Select a separator for concatenation"
+            },
+            "allowed":["-","#",",","+"]
+           },
+           {
+            "name": "fileSelector",
+            "type": "string",
+            "required": true,
+            "display": {
+                "name": "Select a file",
+                
+                "description":"This is a file selector",
+                
+                "type": "fileselector",
+                
+                "fileExtensions":[".txt",".doc"]
+                
+                }
+           },
+           {
+            "name": "headers",
+            "type": "complex_object",
+            "display": {
+            "type": "params",
+            
+            "schema": "{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"parameterName\":{\"type\":\"string\"},\"type\":{\"type\":{\"enum\":[\"string\",\"number\",\"boolean\"]}},\"repeating\":{\"type\":{\"enum\":[\"true\",\"false\"]}},\"required\":{\"type\":{\"enum\":[\"true\",\"false\"]}}}}}",
+            "readonly": false,
+            "name":"Query Params",
+            "description": "The headers you want to send",
+            
+            "mappable": true
+            
+            },
+            
+            "value":{
+            
+            "metadata":"",
+            
+            "value": "[{\"parameterName\":\"Accept\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false},{\"parameterName\":\"Accept- Charset\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false}]"
+            
+            }
+            
+            },
+            {
+                "name": "days",
+                "type": "string",
+                "required": true,
+                "display": {
+                "name":"Select a day ",
+                "description": "Select a day for the audit",
+                
+                "type": "checkbox"
+                
+                },
+                "allowed": ["Monday", "Wednesday", "Friday"],                
+                "value": "Monday"
+                },
+                { "name": "logheaders", "type": "boolean", "required": true, "display": { "name":"Log Incoming headers ", "description": "Log incoming headers" } ,"value": false },
+                { "name": "responseBody", "type": "complex_object", "display": { "type": "texteditor", "description": "An example JSON data that you expect back from the REST service", "name":"Response Schema", "syntax":"json" } },
+                {
+                    "name": "Field Selector",
+                    "type": "array",
+                    "display": {
+                        "description": "Select the fields used for filtering the items to be upserted",
+                        "name": "Field Selector",
+                        "type": "table",
+                        "inputSettingsOnly": true,
+                        "schema": "{ \"items\": { \"properties\": { \"FieldName\": { \"type\": \"string\" }, \"Selected\": { \"type\": { \"enum\": [\"true\", \"false\"] } } }, \"type\": \"object\" }, \"type\": \"array\" }"
+                    },
+                    "value": "[{\"FieldName\":\"Option 1\",\"Selected\":\"true\"},{\"FieldName\": \"Option 2\",\"Selected\": \"false\"}]"
+                }
+            
+            
+    ],
+  
+    "outputs": [
+           {
+            "name": "result",
+            "type": "string"
+          }
+    ]
+}
