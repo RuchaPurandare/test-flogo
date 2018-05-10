@@ -1,4 +1,4 @@
-package concat
+package concatactivity
 
 import (
 	"encoding/base64"
