@@ -102,7 +102,7 @@
                 "value": "Monday"
                 },
                 { "name": "logheaders", "type": "boolean", "required": true, "display": { "name":"Log Incoming headers ", "description": "Log incoming headers" } ,"value": false },
-                { "name": "responseBody", "type": "complex_object", "display": { "type": "texteditor", "description": "An example JSON data that you expect back from the REST service", "name":"Response Schema", "syntax":"json" } },
+                { "name": "responseBody", "type": "complex_object", "display": { "type": "texteditor", "description": "An example JSON data that you expect back from the REST service", "name":"Response Schema", "syntax":"json","mappable": true } },
                 {
                     "name": "Field Selector",
                     "type": "array",

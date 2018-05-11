@@ -1,6 +1,7 @@
 package concatactivity
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -20,6 +21,7 @@ const (
 	ivdropDownField     = "separator"
 	ivFileSelectorField = "fileSelector"
 	ivParamField        = "headers"
+	ivJSONField         = "responseBody"
 	ovResult            = "result"
 )
 
@@ -162,14 +164,14 @@ func GetParameter(context activity.Context) (params *Parameters, err error) {
 	fmt.Println("HeaderMap", headersMap)
 	if headersMap != nil {
 		headers, err := ParseParams(headersMap)
-		fmt.Println("Headers", headers)
+		//fmt.Println("Headers", headers)
 		if err != nil {
 			return params, err
 		}
 
 		if headers != nil {
 			inputHeaders, err := GetComplexValueAsMap(context, "headers")
-			fmt.Println("inputHeaders", inputHeaders)
+			//fmt.Println("inputHeaders", inputHeaders)
 			if err != nil {
 				return params, err
 			}
@@ -254,8 +256,11 @@ func (a *ConcatActivity) Eval(context activity.Context) (done bool, err error) {
 	//Parse json file and get file name
 	var result map[string]interface{}
 	json.Unmarshal([]byte(ivFileSelectorField), &result)
-	fmt.Println(result["filename"])
-	var fileName = result["filename"].(string)
+	var fileName = ""
+	if result != nil {
+		fmt.Println(result["filename"])
+		fileName = result["filename"].(string)
+	}
 
 	//Param field
 
@@ -267,11 +272,30 @@ func (a *ConcatActivity) Eval(context activity.Context) (done bool, err error) {
 		fmt.Println("Err is:", err2)
 		return false, err2
 	}
-	fmt.Println("Params are:", parameters.Headers)
+	//fmt.Println("Params are:", parameters.Headers)
 	for _, value := range parameters.Headers {
 		fmt.Println("Param Name is:", value.Name)
 		fmt.Println("Param value is:", value.Value)
 		fmt.Println("Param Type is:", value.Type)
+	}
+
+	//Complex object- JSON
+	ivJSONField := context.GetInput(ivJSONField).(*data.ComplexObject).Value
+
+	//fmt.Println("JSON output:", ivJSONField.Value)
+	/*Sample json schema:{"key":["string"]}
+	Sample input: array.create("abc", "abc", "67")
+	*/
+	for key, value := range ivJSONField.(map[string]interface{}) {
+		activityLog.Infof("Key Value of JSON param -- %s : %s", key, value)
+		var buffer bytes.Buffer
+		fmt.Println("TypeOfObject:", reflect.TypeOf(value))
+		for k1, v1 := range value.([]interface{}) {
+			fmt.Printf("key[%s] value[%s]\n", k1, v1)
+			buffer.WriteString(v1.(string))
+			buffer.WriteString(",")
+		}
+		fmt.Println(strings.TrimRight(buffer.String(), ","))
 	}
 	//Set output
 	context.SetOutput(ovResult, field1v+field2v+ivPasswordField+ivdropDownField+fileName)
