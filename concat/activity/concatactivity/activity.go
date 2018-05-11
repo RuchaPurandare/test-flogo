@@ -4,9 +4,12 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strings"
 
+	"git.tibco.com/git/product/ipaas/wi-contrib.git/engine/conversion"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+	"github.com/TIBCOSoftware/flogo-lib/core/data"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 )
 
@@ -22,16 +25,25 @@ const (
 
 var activityLog = logger.GetLogger("tibco-activity-concat")
 
-type ConcatActivity struct {
-	metadata *activity.Metadata
-}
-
-/*type Param struct {
+type Param struct {
 	Name      string
 	Type      string
 	Repeating string
 	Required  string
-}*/
+}
+type TypedValue struct {
+	Name  string      `json:"name"`
+	Value interface{} `json:"value"`
+	Type  string      `json:"type"`
+}
+
+type Parameters struct {
+	Headers []*TypedValue `json:"headers"`
+}
+
+type ConcatActivity struct {
+	metadata *activity.Metadata
+}
 
 func NewActivity(metadata *activity.Metadata) activity.Activity {
 	return &ConcatActivity{metadata: metadata}
@@ -41,7 +53,7 @@ func (a *ConcatActivity) Metadata() *activity.Metadata {
 	return a.metadata
 }
 
-/*func convertToMap(data interface{}) (map[string]interface{}, error) {
+func convertToMap(data interface{}) (map[string]interface{}, error) {
 	switch t := data.(type) {
 	case string:
 		if t != "" {
@@ -66,6 +78,7 @@ func (a *ConcatActivity) Metadata() *activity.Metadata {
 		}
 		return m, nil
 	}
+
 	return nil, nil
 }
 func LoadJsonSchemaFromMetadata(valueIN interface{}) (map[string]interface{}, error) {
@@ -81,11 +94,15 @@ func LoadJsonSchemaFromMetadata(valueIN interface{}) (map[string]interface{}, er
 	}
 	return nil, nil
 }
+
 func ParseParams(paramSchema map[string]interface{}) ([]Param, error) {
+
 	if paramSchema == nil {
 		return nil, nil
 	}
+
 	var parameter []Param
+
 	//Structure expected to be JSON schema like
 	props := paramSchema["properties"].(map[string]interface{})
 	for k, v := range props {
@@ -112,9 +129,85 @@ func ParseParams(paramSchema map[string]interface{}) ([]Param, error) {
 		}
 		parameter = append(parameter, *param)
 	}
-	return parameter, nil
-}*/
 
+	return parameter, nil
+}
+
+func GetComplexValueAsMap(context activity.Context, name string) (map[string]interface{}, error) {
+	valueIN := context.GetInput(name)
+	if valueIN != nil {
+		complex := valueIN.(*data.ComplexObject)
+		if complex != nil {
+			switch t := complex.Value.(type) {
+			case string:
+				m := map[string]interface{}{}
+				err := json.Unmarshal([]byte(t), &m)
+				if err != nil {
+					return nil, err
+				}
+				return m, nil
+			default:
+				return convertToMap(complex.Value)
+
+			}
+		}
+	}
+	return nil, nil
+}
+
+func GetParameter(context activity.Context) (params *Parameters, err error) {
+	params = &Parameters{}
+	//Headers
+	headersMap, _ := LoadJsonSchemaFromMetadata(context.GetInput("headers"))
+	fmt.Println("HeaderMap", headersMap)
+	if headersMap != nil {
+		headers, err := ParseParams(headersMap)
+		fmt.Println("Headers", headers)
+		if err != nil {
+			return params, err
+		}
+
+		if headers != nil {
+			inputHeaders, err := GetComplexValueAsMap(context, "headers")
+			fmt.Println("inputHeaders", inputHeaders)
+			if err != nil {
+				return params, err
+			}
+			var typeValuesHeaders []*TypedValue
+			for _, hParam := range headers {
+				isRequired := hParam.Required
+				paramName := hParam.Name
+				if isRequired == "true" && inputHeaders[paramName] == nil {
+					return nil, fmt.Errorf("Required header parameter [%s] is not configured.", paramName)
+				}
+				if inputHeaders[paramName] != nil {
+					if hParam.Repeating == "true" {
+						val := inputHeaders[paramName]
+						switch reflect.TypeOf(val).Kind() {
+						case reflect.Slice:
+							s := reflect.ValueOf(val)
+							for i := 0; i < s.Len(); i++ {
+								typeValue := &TypedValue{}
+								typeValue.Name = paramName
+								typeValue.Value = s.Index(i).Interface()
+								typeValue.Type = hParam.Type
+								typeValuesHeaders = append(typeValuesHeaders, typeValue)
+							}
+						}
+					} else {
+						typeValue := &TypedValue{}
+						typeValue.Name = paramName
+						typeValue.Value = inputHeaders[paramName]
+						typeValue.Type = hParam.Type
+						typeValuesHeaders = append(typeValuesHeaders, typeValue)
+					}
+					params.Headers = typeValuesHeaders
+				}
+			}
+		}
+	}
+	return params, err
+}
 func (a *ConcatActivity) Eval(context activity.Context) (done bool, err error) {
 	activityLog.Info("Executing Concat activity")
 	//Read Inputs
@@ -163,14 +256,23 @@ func (a *ConcatActivity) Eval(context activity.Context) (done bool, err error) {
 	json.Unmarshal([]byte(ivFileSelectorField), &result)
 	fmt.Println(result["filename"])
 	var fileName = result["filename"].(string)
+
 	//Param field
-	/*queryParamsMap, _ := LoadJsonSchemaFromMetadata(context.GetInput(ivParamField))
-	if queryParamsMap != nil {
-		queryParams, err2 := ParseParams(queryParamsMap)
-		if err != nil {
-			return params, err2
-		}
-	}*/
+
+	//ivParamField := context.GetInput(ivParamField).(*data.ComplexObject)
+	//fmt.Println(ivParamField)
+
+	parameters, err2 := GetParameter(context)
+	if err2 != nil {
+		fmt.Println("Err is:", err2)
+		return false, err2
+	}
+	fmt.Println("Params are:", parameters.Headers)
+	for _, value := range parameters.Headers {
+		fmt.Println("Param Name is:", value.Name)
+		fmt.Println("Param value is:", value.Value)
+		fmt.Println("Param Type is:", value.Type)
+	}
 	//Set output
 	context.SetOutput(ovResult, field1v+field2v+ivPasswordField+ivdropDownField+fileName)
 	return true, nil

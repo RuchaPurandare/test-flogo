@@ -43,7 +43,7 @@ func TestEval(t *testing.T) {
 	tc.SetInput("password", data)
 	tc.SetInput("separator", "#")
 	tc.SetInput("fileSelector", "{\"content\":\"data:text/plain;base64,MS5XaGVyZSB3aWxsIHdlIHNldCB1cCBkb2NrZXI/DQoyLkFyZSB3ZSBkZXZlbG9waW5nIGNvbW11bml0eSBlZGl0aW9uIGNvbnRyaWJ1dGlvbj8NCjMuV2hpY2ggcGx1Z2luIHdlIGFyZSBjb252ZXJ0aW5nIHRvIGNvbnRpYnV0aW9uPw0KIA==\",\"filename\":\"questions.txt\"}")
-	//tc.SetInput("headers", "[{\"parameterName\":\"sddd\",\"type\":\"number\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":true},{\"parameterName\":\"Accept- Charset\",\"type\":\"string\",\"repeating\":\"false\",\"required\":\"false\",\"visible\":false}]")
+	//tc.SetInput("headers", "&{{\"type\":\"object\",\"properties\":{\"sdsd\":{\"required\":\"true\",\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"Accept\":{\"required\":\"false\",\"type\":\"string\"},\"Accept- Charset\":{\"required\":\"false\",\"type\":\"string\"}},\"required\":[\"sdsd\"]} {}}")
 	_, err := act.Eval(tc)
 	assert.Nil(t, err)
 	result := tc.GetOutput("result")
