@@ -1,0 +1,66 @@
+{
+    "name": "table",
+    "title": "Table Activity",
+    "version": "1.0.0",
+    "type": "flogo:activity",
+    "author": "TIBCO Software Inc.",
+    "display": {
+       "category": "test",
+       "visible": true,
+       "smallIcon": "image.png",
+       "description": "This activity returns concatenation of two strings"
+    },
+ 
+    "ref": "test/activity/table",
+    "inputs": [
+                {
+                    "name": "My Table",
+                    "type": "array",
+                    "required": false,
+                    "display": {
+                        "description": "This is a test table",
+                        "name": "My Table",
+                        "type": "table",
+                        "inputSettingsOnly": true,
+                        "mappable":true,
+                        "schema": "{ \"items\": { \"properties\": { \"FieldName\": { \"type\": \"string\" }, \"Selected\": { \"type\": { \"enum\": [\"true\", \"false\"] } } }, \"type\": \"object\" }, \"type\": \"array\" }"
+                    },
+                    "value": "[{\"FieldName\":\"Option 1\",\"Selected\":\"true\"},{\"FieldName\": \"Option 2\",\"Selected\": \"false\"}]"
+                }
+            
+            
+    ],
+  
+    "outputs": [
+           {
+            "name": "tableoutput",
+            "type": "complex_object",
+            "required": true,
+            "value":{
+                "value":"{\"key\":\"abc\",\"val\":\"vf\"}",
+                "metadata":""
+            },
+            "display": {
+                    "name":"Response Schema",
+                    "type":"texteditor",
+                    "syntax":"json"
+                }
+          },
+          {
+            "name": "testString",
+            "type": "string",
+            "required": true
+           },
+           {
+             "name": "output",
+             "type": "complex_object",
+             "display": {
+               "name":"Add Numbers",
+               "type": "table",
+               "schema": "{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"Number\":{\"type\":\"string\"},\"Type\":{\"type\":\"number\"}}}}"
+             }
+            }
+            
+        
+    ]
+}

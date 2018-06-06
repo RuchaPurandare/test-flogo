@@ -1,0 +1,92 @@
+{
+    "name": "demo",
+    "title": "Concat Activity",
+    "version": "1.0.0",
+    "type": "flogo:activity",
+    "author": "TIBCO Software Inc.",
+    "display": {
+       "category": "populateio",
+       "visible": true,
+       "smallIcon": "image.png",
+       "description": "This activity returns concatenation of two strings"
+    },
+ 
+    "ref": "populateio/activity/demo",
+    "inputs": [
+        {
+            "name": "firstString",
+            "type": "string",
+            "value": "test",
+            "required": true
+           },
+           {
+            "name": "secondString",
+            "type": "string",
+            "required": true
+           },
+           {
+            "name": "useSeparator",
+            "type": "boolean",
+            "required": true,
+            "display": {
+               "name": "Use Separator",
+               "description": "Use separator for concatenation"
+            },
+            "value": false
+           },
+           {
+            "name": "separator",
+            "type": "string",
+            "required": true,
+            "display": {
+               "name": "Separator",
+               "type": "dropdown",
+               "selection": "single",
+               "description": "Select a separator for concatenation",
+               "visible": false
+            },
+            "allowed":[]
+           },
+           {
+            "name": "charType",
+            "type": "string",
+            "required": true,
+            "display": {
+               "name": "Character Type",
+               "type": "dropdown",
+               "selection": "single",
+               "description": "Select a type of character"
+            },
+            "allowed":[]
+           },
+           {
+            "name": "options",
+            "type": "string",
+            "required": true,
+            "display": {
+               "name": "Options",
+               "type": "dropdown",
+               "selection": "single",
+               "description": "List of available options"
+            },
+            "allowed":[]
+           },
+           {
+            "name": "input",
+            "type": "complex_object"
+           }
+            
+            
+    ],
+  
+    "outputs": [
+           {
+            "name": "result",
+            "type": "string"
+          },
+          {
+            "name": "output",
+            "type": "complex_object"
+           }
+    ]
+}

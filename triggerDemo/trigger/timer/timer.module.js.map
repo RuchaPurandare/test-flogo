@@ -1,0 +1,1 @@
+{"version":3,"file":"timer.module.js","sourceRoot":"","sources":["timer.module.ts"],"names":[],"mappings":";;;;;;;;AAAA,sCAAuC;AACvC,iCAA4C;AAC5C,+DAAuE;AAUvE,IAAqB,kBAAkB;IAAvC;IAEA,CAAC;IAAD,yBAAC;AAAD,CAAC,AAFD,IAEC;AAFoB,kBAAkB;IARtC,eAAQ,CAAC;QACN,SAAS,EAAE;YACP;gBACI,OAAO,EAAE,kCAAqB;gBAC9B,QAAQ,EAAE,2BAAmB;aAChC;SACJ;KACJ,CAAC;GACmB,kBAAkB,CAEtC;kBAFoB,kBAAkB"}

@@ -1,0 +1,97 @@
+{
+	"name": "mytestConn",
+	"title": "My Test Connector",
+	"author": "TIBCO Software Inc.",
+	"type": "flogo:connector",
+	"version": "1.0.0",
+	"display": {
+		"description": "This is a test Connector",
+		"category": "connectordemo",
+		"visible": true
+		},
+	"ref": "connectordemo/connector/myconnector",
+	"keyfield": "name",
+	"settings": [
+		{
+			"name": "name",
+			"type": "string",
+			"required": true,
+			"display": {
+				"name": "Connection Name",
+				"description": "Name of the connection"
+			}
+		},
+		{
+			"name": "clientId",
+			"type": "string",
+			"required": true,
+			"display": {
+				"name": "Client Id",
+				"description": "Enter Client Id"
+			}
+		},
+		{
+			"name": "redirectUri",
+			"type": "string",
+			"required": true,
+			"display": {
+				"name": "Redirect URI",
+				"description": "Enter Redirect URI"
+			}
+		},
+		{
+			"name": "scope",
+			"type": "string",
+			"required": true,
+			"display": {
+				"name": "Scope",
+				"description": "Enter scope"
+			}
+		},
+		{
+			"name": "accessType",
+			"type": "string",
+			"required": true,
+			"display": {
+				"name": "Access Type",
+				"description": "Enter Access Type"
+			}
+		},
+		{
+			"name": "state",
+			"type": "string",
+			"required": true,
+			"display": {
+				"name": "State",
+				"description": "Enter state"
+			}
+		},
+		{
+			"name": "userName",
+			"type": "string",
+			"required": true,
+			"display": {
+				"name": "User Name",
+				"description": "Enter User Name"
+			}
+		},
+		{
+			"name": "password",
+			"type": "string",
+			"required": true,
+			"display": {
+				"name": "Password",
+				"description": "Enter Password",
+				"type": "password"
+			}
+		}
+	],
+	"actions": [
+		{
+			"name": "Connect",
+			"display": {
+                "readonly": true
+            }
+		}
+	]
+}

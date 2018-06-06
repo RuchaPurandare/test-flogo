@@ -1,0 +1,67 @@
+{
+	"title": "Timer Trigger",
+	"name": "tibco-wi-timer",
+	"author": "TIBCO Software Inc.",
+	"version": "1.0.0",
+	"type": "flogo:trigger",
+	"display": {
+		"description": "Simple Timer trigger",
+		"category": "General",
+		"visible": true,
+		"smallIcon": "icons/ic-tibco-wi-timer.svg",
+		"largeIcon": "icons/ic-tibco-wi-timer@2x.png"
+	},
+	"ref": "git.tibco.com/git/product/ipaas/wi-contrib.git/contributions/General/trigger/timer",
+	"settings": [],
+	"handler": {
+		"settings": [
+			{
+				"name": "Repeating",
+				"type": "boolean",
+				"display": {
+					"name": "Repeating",
+					"description": "Indicates whether this flow should run only once or multiple times"
+				},
+				"value": false,
+				"required": true
+			},
+			{
+				"name": "Start Date",
+				"type": "string",
+				"display": {
+					"visible": false,
+					"name": "Start Date"
+				}
+			},
+			{
+				"name": "Time Interval",
+				"type": "integer",
+				"display": {
+					"name": "Time Interval",
+					"description": "The time interval to start the flow execution"
+				},
+				"value": 1,
+				"required": true
+			},
+			{
+				"name": "Interval Unit",
+				"type": "string",
+				"required": true,
+				"display": {
+					"name": "Interval Unit",
+					"description": "The unit of time interval to start the flow execution",
+					"type": "dropdown",
+					"selection": "single"
+				},
+				"value": "Second",
+				"allowed": [
+					"Second",
+					"Minute",
+					"Hour",
+					"Day",
+					"Week"
+				]
+			}
+		]
+	}
+}

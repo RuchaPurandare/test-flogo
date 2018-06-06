@@ -1,0 +1,93 @@
+{
+    "name": "MyDemoTimer",
+    "author": "TIBCO Software Inc.",
+    "type": "flogo:trigger",
+    "version": "1.0.0",
+    "title": "My Demo Timer",
+    "display": {
+       "description": "This is demo trigger",
+       "uid": "tibco-demo",
+       "category": "DEMO",
+       "visible": true,
+        "sections": [ "Tab 1 Name", "Tab 2 Name"],
+        "wizard": ["Step 1"],
+       "smallIcon": "image.png"
+    },
+    "useReplyHandler": false,
+ 
+    "ref": "triggerTest/trigger/timer",
+ 
+    "handler": {
+        "settings": [{
+            "name": "Method",
+            "type": "string",
+            "required": true,
+            "allowed": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "value": "GET",
+            "display": {
+                "description": "The type of the HTTP method",
+                "name": "Method",
+                "type": "dropdown",
+                "selection": "single"
+            },
+            "wizard": {
+                "type": "selectButtons",
+                "selection": "multiple",
+                "step": "Step 1",
+                "css": {
+                    "IDEAL::GET": "{ border: dotted 4px #4dbdc7;color: #4dbdc7;}",
+                    "IDEAL::POST": "{ border: dotted 4px #89a857;color: #89a857;}",
+                    "IDEAL::PUT": "{ border: dotted 4px #efb416;color: #efb416;}",
+                    "IDEAL::DELETE": "{ border: dotted 4px #d3418c;color: #d3418c;}",
+                    "SELECTED::GET": "{background-color: #0fbfc7;border: solid 4px #4dbdc7;}",
+                    "SELECTED::POST": "{background-color: #89a857;border: solid 4px #89a857;}",
+                    "SELECTED::PUT": "{background-color: #efb416;border: solid 4px #efb416;}",
+                    "SELECTED::DELETE": "{background-color: #d3418c;border: solid 4px #d3418c;}"
+                }
+            }
+        },
+        {
+            "name": "Path",
+            "type": "string",
+            "required": true,
+            "display": {
+                "description": "The resource path you have selected",
+                "name": "Path"
+            },
+            "wizard": {
+                "name": "Resource path",
+                "type": "string",
+                "step": "Step 1"
+            }
+        }
+    ]
+    },
+    "outputs": [
+        {
+            "name": "body",
+            "type": "complex_object",
+            "display": {
+                "name": "Request Schema",
+                "description": "The request schema of the trigger",
+                "type": "texteditor",
+                "syntax": "json"
+            },
+            "wizard": {
+                "name": "Enter a JSON Schema or an example of your JSON message",
+                "type": "texteditor",
+                "syntax": "json",
+                "step": "Step 1"
+            }
+        }
+    ],
+    "actions": [
+          {
+            "name": "Finish"
+          }
+    ]
+}
